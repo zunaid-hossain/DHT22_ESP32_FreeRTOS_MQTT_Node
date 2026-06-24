@@ -48,10 +48,15 @@ esp32/wokwi/freertos/status
 
 {
 "device_id":"ESP32_Wokwi_FreeRTOS_Node_01",
+
 "temperature":24.5,
+
 "humidity":60.1,
+
 "wifi_rssi":-72,
+
 "uptime_sec":120,
+
 "state":"MQTT_CONNECTED"
 }
 
