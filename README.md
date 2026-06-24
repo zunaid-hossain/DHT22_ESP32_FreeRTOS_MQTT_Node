@@ -74,15 +74,13 @@ MQTT_CONNECTED
 
 ## Simulation
 
-Wokwi Project:
-[Paste Wokwi Share Link Here]
+Wokwi Project: https://wokwi.com/projects/467724628107981825
 
 ## Demonstration Video
 
-[Paste Video Link Here]
 
 ## Author
 
 Md. Zunaid Hossain
 Internet of Things and Robotics Engineering
-Bangabandhu Sheikh Mujibur Rahman Digital University, Bangladesh
+University Of Frontier Technology , Bangladesh
