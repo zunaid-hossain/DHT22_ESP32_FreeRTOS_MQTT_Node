@@ -6,6 +6,9 @@
 #define LED_PIN 2
 #define DHT_PIN 15
 
+#define LED_ON  HIGH
+#define LED_OFF LOW
+
 const char* ssid = "Wokwi-GUEST";
 const char* password = "";
 
@@ -56,6 +59,8 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
     message += (char)payload[i];
   }
 
+  message.trim();
+
   Serial.print("[MQTT] Topic: ");
   Serial.println(topic);
   Serial.print("[MQTT] Message: ");
@@ -63,11 +68,13 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
   if (String(topic) == topic_command) {
     if (message == "ON") {
-      digitalWrite(LED_PIN, HIGH);
+      digitalWrite(LED_PIN, LED_ON);
+      Serial.println("[LED] ON");
       client.publish(topic_telemetry, "{\"event\":\"LED_ON\"}");
     } 
     else if (message == "OFF") {
-      digitalWrite(LED_PIN, LOW);
+      digitalWrite(LED_PIN, LED_OFF);
+      Serial.println("[LED] OFF");
       client.publish(topic_telemetry, "{\"event\":\"LED_OFF\"}");
     }
   }
@@ -161,11 +168,14 @@ void mqttSensorTask(void* parameter) {
 
           TempAndHumidity data = dhtSensor.getTempAndHumidity();
 
+          float simulatedTemp = data.temperature + random(-20, 21) * 0.1;
+          float simulatedHum  = data.humidity + random(-30, 31) * 0.1;
+
           JsonDocument doc;
 
           doc["device_id"] = device_id;
-          doc["temperature"] = data.temperature;
-          doc["humidity"] = data.humidity;
+          doc["temperature"] = simulatedTemp;
+          doc["humidity"] = simulatedHum;
           doc["wifi_rssi"] = WiFi.RSSI();
           doc["uptime_sec"] = millis() / 1000;
           doc["state"] = getStateName();
@@ -193,7 +203,9 @@ void setup() {
   Serial.println("Booting ESP32 Wokwi FreeRTOS MQTT Node...");
 
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
+  digitalWrite(LED_PIN, LED_OFF);
+
+  randomSeed(esp_random());
 
   dhtSensor.setup(DHT_PIN, DHTesp::DHT22);
 
